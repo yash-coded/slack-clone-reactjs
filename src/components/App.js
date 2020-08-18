@@ -26,6 +26,7 @@ function App({
       <SidePanel
         key={currentUser && currentUser.uid}
         currentUser={currentUser}
+        currentChannel={currentChannel}
         primaryColor={primaryColor}
       />
       <Grid.Column style={{ marginLeft: 320 }}>

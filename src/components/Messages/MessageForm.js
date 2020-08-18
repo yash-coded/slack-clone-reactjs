@@ -96,6 +96,7 @@ class MessageForm extends Component {
   sendMessage = () => {
     const { getMessagesRef } = this.props;
     const { message, channel, typingRef, user } = this.state;
+
     if (message) {
       this.setState({ loading: true });
       getMessagesRef()

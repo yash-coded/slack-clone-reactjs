@@ -14,14 +14,45 @@ class UserPanel extends Component {
     storageRef: firebase.storage().ref(),
     userRef: firebase.auth().currentUser,
     usersRef: firebase.database().ref("users"),
+    messagesRef: firebase.database().ref(`messages/`),
+    newProfilePicture: "",
     metadata: {
       contentType: "image/jpeg",
     },
     uploadCroppedImage: "",
+    messagesArray: [],
   };
 
-  openModal = () => this.setState({ modal: true });
-  closeModal = () => this.setState({ modal: false });
+  openModal = () => {
+    this.setState({ modal: true });
+    this.state.messagesRef
+      .child(this.props.currentChannel.id)
+      .on("value", (snap) => {
+        const newDp = snap.val();
+        const messagesArray = [];
+        const keysArray = Object.entries(newDp);
+        keysArray.map((array) => {
+          const messages = {};
+          messages["messageID"] = array[0];
+          messages["data"] = array[1];
+
+          messagesArray.push(messages);
+        });
+
+        this.setState({ messagesArray: messagesArray });
+      });
+  };
+  closeModal = () => {
+    this.setState({ modal: false });
+    this.state.messagesArray.map((array) => {
+      if (array.data.user.id === this.state.user.uid) {
+        this.state.messagesRef
+          .child(this.props.currentChannel.id)
+          .child(array.messageID + "/user")
+          .update({ avatar: this.state.uploadCroppedImage });
+      }
+    });
+  };
 
   dropdownOptions = () => [
     {

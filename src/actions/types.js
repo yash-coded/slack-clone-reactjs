@@ -12,3 +12,5 @@ export const SET_USER_POSTS = "SET_USER_POSTS";
 // colors actions
 
 export const SET_COLORS = "SET_COLORS";
+
+// avatar actions

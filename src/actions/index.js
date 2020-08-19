@@ -54,3 +54,5 @@ export const setColors = (primaryColor, secondaryColor) => {
     },
   };
 };
+
+// avatar actions

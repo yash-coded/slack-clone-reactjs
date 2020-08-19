@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import firebase from "../../firebase";
 import { Image, Button } from "semantic-ui-react";
 import AvatarEditor from "react-avatar-editor";
+import { connect } from "react-redux";
 
 import { Grid, Header, Icon, Dropdown, Modal, Input } from "semantic-ui-react";
 class UserPanel extends Component {
@@ -15,6 +16,7 @@ class UserPanel extends Component {
     userRef: firebase.auth().currentUser,
     usersRef: firebase.database().ref("users"),
     messagesRef: firebase.database().ref(`messages/`),
+    privateMessagesRef: firebase.database().ref("privateMessages"),
     newProfilePicture: "",
     metadata: {
       contentType: "image/jpeg",
@@ -32,7 +34,7 @@ class UserPanel extends Component {
         const messagesArray = [];
         const keysArray = Object.entries(newDp);
         keysArray.map((array) => {
-          const messages = {};
+          let messages = {};
           messages["messageID"] = array[0];
           messages["data"] = array[1];
 
@@ -44,14 +46,6 @@ class UserPanel extends Component {
   };
   closeModal = () => {
     this.setState({ modal: false });
-    this.state.messagesArray.map((array) => {
-      if (array.data.user.id === this.state.user.uid) {
-        this.state.messagesRef
-          .child(this.props.currentChannel.id)
-          .child(array.messageID + "/user")
-          .update({ avatar: this.state.uploadCroppedImage });
-      }
-    });
   };
 
   dropdownOptions = () => [
@@ -108,6 +102,15 @@ class UserPanel extends Component {
       .then(() => {
         console.log("user avatar updated");
       });
+
+    this.state.messagesArray.map((array) => {
+      if (array.data.user.id === this.state.user.uid) {
+        this.state.messagesRef
+          .child(this.props.currentChannel.id)
+          .child(array.messageID + "/user")
+          .update({ avatar: this.state.uploadCroppedImage });
+      }
+    });
   };
 
   handleChange = (event) => {

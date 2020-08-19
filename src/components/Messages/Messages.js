@@ -10,6 +10,8 @@ import Typing from "./Typing";
 import Skeleton from "./Skeleton";
 class Messages extends Component {
   state = {
+    newImage: this.props.newImage,
+    messagesInChannel: this.props.messages,
     privateMessagesRef: firebase.database().ref("privateMessages"),
     privateChannel: this.props.isPrivateChannel,
     messagesRef: firebase.database().ref("messages"),

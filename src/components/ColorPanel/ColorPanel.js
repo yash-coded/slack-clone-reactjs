@@ -114,7 +114,7 @@ class ColorPanel extends Component {
             width="very thin"
           >
             <Divider />
-            <Header inverted>{this.state.width}</Header>
+            {/* <Header inverted>{this.state.width}</Header> */}
             <Button
               icon="add"
               size="small"

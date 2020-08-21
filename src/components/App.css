@@ -49,6 +49,14 @@ body,
 }
 
 /* color panel */
+
+@media only screen and (max-width: 600px) {
+  /* * {
+    margin: 0 !important;
+    padding: 0 !important;
+  } */
+}
+
 .color__container {
   cursor: pointer;
   position: relative;

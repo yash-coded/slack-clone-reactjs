@@ -101,7 +101,7 @@ class DirectMessages extends Component {
     const { users, activeChannel } = this.state;
     return (
       <div>
-        <Menu.Menu className="menu">
+        <Menu.Menu className="menu userpanel--header">
           <Menu.Item>
             <span>
               <Icon name="mail" /> DIRECT MESSAGES

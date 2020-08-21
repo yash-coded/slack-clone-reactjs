@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import firebase from "../../firebase";
 import { connect } from "react-redux";
 import { setColors } from "../../actions/index";
@@ -11,6 +11,7 @@ import {
   Icon,
   Label,
   List,
+  Header,
   Segment,
 } from "semantic-ui-react";
 import { SliderPicker } from "react-color";
@@ -23,13 +24,22 @@ class ColorPanel extends Component {
     user: this.props.currentUser,
     usersRef: firebase.database().ref("users"),
     userColors: [],
+    width: "",
+    height: "",
+  };
+
+  getWindowDimensions = () => {
+    const { innerWidth: width, innerHeight: height } = window;
+    return this.setState({ width, height });
   };
 
   componentDidMount() {
     this.addListener(this.state.user.uid);
+    window.addEventListener("resize", this.getWindowDimensions);
   }
   componentWillUnmount() {
     this.removeListener();
+    window.removeEventListener("resize", this.getWindowDimensions);
   }
   removeListener = () => {
     this.state.usersRef.child(`${this.state.user.uid}/colors`).off();
@@ -90,49 +100,60 @@ class ColorPanel extends Component {
   };
 
   render() {
-    const { modal, primary, secondary, userColors } = this.state;
-    return (
-      <Sidebar
-        as={Menu}
-        icon="labeled"
-        inverted
-        vertical
-        visible
-        width="very thin"
-      >
-        <Divider />
-        <Button icon="add" size="small" color="blue" onClick={this.openModal} />
-        {this.displayUserColors(userColors)}
-        {/* color picker modal */}
-        <Modal dimmer="blurring" open={modal} onClose={this.closeModal}>
-          <Modal.Header>Choose App Colors</Modal.Header>
-          <Modal.Content>
-            <Segment inverted>
-              <Label content="Primary Color" />
-              <SliderPicker
-                color={primary}
-                onChange={this.handleChangePrimary}
-              />
-            </Segment>
-            <Segment inverted>
-              <Label content="Secondary Color" />
-              <SliderPicker
-                color={secondary}
-                onChange={this.handleChangeSecondary}
-              />
-            </Segment>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button color="red" inverted onClick={this.closeModal}>
-              <Icon name="remove" /> Cancel
-            </Button>
-            <Button color="green" inverted onClick={this.handleSaveColor}>
-              <Icon name="checkmark" /> Save Colors
-            </Button>
-          </Modal.Actions>
-        </Modal>
-      </Sidebar>
-    );
+    const { modal, primary, secondary, userColors, width } = this.state;
+    if (width > 600) {
+      return (
+        <React.Fragment>
+          <Sidebar
+            as={Menu}
+            icon="labeled"
+            inverted
+            vertical
+            visible
+            className="colorPanel"
+            width="very thin"
+          >
+            <Divider />
+            <Header inverted>{this.state.width}</Header>
+            <Button
+              icon="add"
+              size="small"
+              color="blue"
+              onClick={this.openModal}
+            />
+            {this.displayUserColors(userColors)}
+            {/* color picker modal */}
+            <Modal dimmer="blurring" open={modal} onClose={this.closeModal}>
+              <Modal.Header>Choose App Colors</Modal.Header>
+              <Modal.Content>
+                <Segment inverted>
+                  <Label content="Primary Color" />
+                  <SliderPicker
+                    color={primary}
+                    onChange={this.handleChangePrimary}
+                  />
+                </Segment>
+                <Segment inverted>
+                  <Label content="Secondary Color" />
+                  <SliderPicker
+                    color={secondary}
+                    onChange={this.handleChangeSecondary}
+                  />
+                </Segment>
+              </Modal.Content>
+              <Modal.Actions>
+                <Button color="red" inverted onClick={this.closeModal}>
+                  <Icon name="remove" /> Cancel
+                </Button>
+                <Button color="green" inverted onClick={this.handleSaveColor}>
+                  <Icon name="checkmark" /> Save Colors
+                </Button>
+              </Modal.Actions>
+            </Modal>
+          </Sidebar>
+        </React.Fragment>
+      );
+    } else return null;
   }
 }
 

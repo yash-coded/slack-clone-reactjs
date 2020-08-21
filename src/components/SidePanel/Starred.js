@@ -74,7 +74,7 @@ class Starred extends Component {
   render() {
     const { starredChannels } = this.state;
     return (
-      <Menu.Menu className="menu">
+      <Menu.Menu className="menu userpanel--header">
         <Menu.Item>
           <span>
             <Icon name="star" /> STARRED

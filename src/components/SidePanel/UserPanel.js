@@ -148,15 +148,25 @@ class UserPanel extends Component {
     const { primaryColor } = this.props;
 
     return (
-      <Grid style={{ background: primaryColor }}>
+      <Grid style={{ background: primaryColor }} className="userpanel">
         <Grid.Column>
           <Grid.Row style={{ padding: "1.2em", margin: 0 }}>
-            <Header inverted floated="left" as="h2">
+            <Header
+              inverted
+              floated="left"
+              as="h2"
+              className="userpanel--header"
+            >
               <Icon name="code" />
               <Header.Content>DevChat</Header.Content>
             </Header>
           </Grid.Row>
-          <Header style={{ padding: "0.25em" }} as="h4" inverted>
+          <Header
+            style={{ padding: "0.25em" }}
+            as="h4"
+            inverted
+            className="userpanel--header"
+          >
             <Dropdown
               trigger={
                 <span>
